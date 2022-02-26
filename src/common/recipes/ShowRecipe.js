@@ -13,6 +13,7 @@ function ShowRecipes(){
   const [recipe, setRecipe] = React.useState(null)
   const [isError, setIsError] = React.useState(null)
   const [hasFavourited, setHasFavourited] = React.useState(false)
+  const [favouriteId, setFavouriteId] = React.useState(null)
   const isLoading = !recipe && !isError
   
   const fetchRecipe = React.useCallback(() => {
@@ -20,9 +21,15 @@ function ShowRecipes(){
       try {
         const res = await getSingleRecipe(recipeId)
         setRecipe(res.data)
+        // res.data.favouritedBy.map(favourite => {
+        //   const ownerId = String(favourite._id)
+        //   if (ownerId === profileId){
+
+        //   }
+        // })
       } catch (err) {
         setIsError(true)
-      }
+      } 
     
     }
     getData()
@@ -36,14 +43,15 @@ function ShowRecipes(){
     e.preventDefault()
     try {
       const faveClick = await toggleFavourite(recipeId)
+      const favouriteId = faveClick.data.favouritedBy.id
+      setFavouriteId(favouriteId)
       console.log(faveClick.data.favouritedBy)
       setHasFavourited(!hasFavourited)
     } catch (err) {
-      console.log('error')
-      // setIsError(true)
+      setIsError(true)
     }
   }
-  console.log(hasFavourited)
+  
 
   const handleDeleteComment = async (commentId) => {
     if (window.confirm('Do you want to delete this comment?')) {
@@ -78,11 +86,11 @@ function ShowRecipes(){
                 </figure>  
                 {hasFavourited ? 
                   <button className="faveBtn" onClick={handleFavouriteClick}>                
-                    <i className="bi-bookmark-heart"> Remove Favourites</i>
+                    <i className="bi bi-bookmark-heart">Remove Favourites</i> 
                   </button>   
                   : 
                   <button className="faveBtn" onClick={handleFavouriteClick}>                
-                    <i className="bi-bookmark-heart"> Add to Favourites</i>
+                    <i className="bi bi-bookmark-heart"> Add to Favourites</i>
                   </button>   
                 }
                 

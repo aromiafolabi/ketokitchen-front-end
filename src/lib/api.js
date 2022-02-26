@@ -26,7 +26,6 @@ export function toggleFavourite(recipeId) {
 
 // * Profile Request
 
-// make a function for getting profile information
 export function getProfileInfo(userId) {
   console.log(userId)
   return axios.get(`${baseUrl}/profile/${userId}`)
